@@ -50,10 +50,10 @@
     <input id="otherVoltage" placeholder="Masukkan V jika pilih Lainnya" style="display:none; max-width:160px;" />
   </div>
 
-  <label>Efisiensi (η) — default 0.90</label>
+  <label>Efisiensi Motor (η) — default 0.90</label>
   <input id="eff" type="number" step="0.01" value="0.90" />
 
-  <label>Power Factor (pf) — default 0.85</label>
+  <label>Cos Phi Motor (pf) — default 0.85</label>
   <input id="pf" type="number" step="0.01" value="0.85" />
 
   <label>Persentase seting TOR</label>
@@ -67,7 +67,7 @@
 
   <div id="result" class="result" style="display:none;">
     <div><strong>Arus nominal motor (A):</strong> <span id="iFL">-</span> A</div>
-    <div><strong>Rekomendasi seting TOR:</strong> <span id="torAmp">-</span> A (<span id="torPct">-</span> % dari IFL)</div>
+    <div><strong>Rekomendasi Arus TOR:</strong> <span id="torAmp">-</span> A (<span id="torPct">-</span> % dari IFL)</div>
     <div class="small" style="margin-top:8px;">
       Keterangan: Formula 3-fase: I = P(kW)*1000 / (√3 * V * η * pf). Jika ada data nameplate, gunakan arus nameplate.
     </div>
@@ -129,6 +129,7 @@
   </script>
 </body>
 </html>
+
 
 
 
