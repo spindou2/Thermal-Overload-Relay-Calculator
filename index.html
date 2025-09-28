@@ -21,7 +21,7 @@
   <div style="text-align:center; padding:10px 0;">
     <img src="https://lirp.cdn-website.com/2f73b385/dms3rep/multi/opt/Logo+SPINDO+-+New-1920w.jpg" style="max-width:180px; height:auto; margin:0;">
   </div>
-  <h1>Kalkulator Setting TOR</h1>
+  <h1>Kalkulator Thermis SPINDO II</h1>
   <div class="small">Masukkan daya motor (kW atau HP). Pilih 1-fase atau 3-fase, tegangan, dan (opsional) efisiensi/power factor.</div>
 
   <label>Input daya</label>
@@ -66,8 +66,8 @@
   <button id="calcBtn">Hitung</button>
 
   <div id="result" class="result" style="display:none;">
-    <div><strong>Arus nominal motor (A):</strong> <span id="iFL">-</span> A</div>
-    <div><strong>Rekomendasi Arus TOR:</strong> <span id="torAmp">-</span> A (<span id="torPct">-</span> % dari IFL)</div>
+    <div><strong>Arus Kerja Motor(A):</strong> <span id="iFL">-</span> A</div>
+    <div><strong>Arus Thermis(A):</strong> <span id="torAmp">-</span> A (<span id="torPct">-</span> % dari IFL)</div>
     <div class="small" style="margin-top:8px;">
       Keterangan: Formula 3-fase: I = P(kW)*1000 / (√3 * V * η * pf). Jika ada data nameplate, gunakan arus nameplate.
     </div>
@@ -129,6 +129,7 @@
   </script>
 </body>
 </html>
+
 
 
 
