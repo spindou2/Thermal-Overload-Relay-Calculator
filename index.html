@@ -56,7 +56,7 @@
   <label>Cos Phi Motor (pf) — default 0.85</label>
   <input id="pf" type="number" step="0.01" value="0.85" />
 
-  <label>Persentase seting TOR</label>
+  <label>Persentase Proteksi</label>
   <select id="torPercent">
     <option value="1.15">115%</option>
     <option value="1.20" selected>120%</option>
@@ -66,12 +66,29 @@
   <button id="calcBtn">Hitung</button>
 
   <div id="result" class="result" style="display:none;">
+  
+  <div style="background:#eef2ff; padding:14px; border-radius:10px; margin-bottom:14px;">
     <div><strong>Arus Kerja Motor(A):</strong> <span id="iFL">-</span> A</div>
     <div><strong>Arus Thermis(A):</strong> <span id="torAmp">-</span> A (<span id="torPct">-</span> dari Arus motor)</div>
+
     <div class="small" style="margin-top:8px;">
-      Keterangan: Formula 3-fase: I = P(kW)*1000 / (√3 * V * η * pf). Jika ada data nameplate, gunakan arus nameplate.
+      Keterangan: Formula 3-fase:
+      I = P(kW)*1000 / (√3 × V × η × pf).
+      Jika ada data nameplate, gunakan arus nameplate.
     </div>
   </div>
+
+  <div style="background:#ecfdf5; padding:14px; border-radius:10px; border:1px solid #10b981;">
+    <div><strong>KHA Minimum Kabel(A):</strong> <span id="khaAmp">-</span> A</div>
+    <div><strong>Rekomendasi Kabel:</strong> <span id="cableSize">-</span></div>
+    <div><strong>Kapasitas Kabel:</strong> <span id="cableAmp">-</span> A</div>
+
+    <div class="small" style="margin-top:8px;">
+      Rekomendasi kabel berdasarkan KHA minimum sesuai persentase proteksi yang dipilih.
+    </div>
+  </div>
+
+</div>
 
   <footer>
     Simulasi penentuan Arus setting TOR dibuat untuk mempermudah operator Unit II dilapangan dalam bekerja
@@ -91,6 +108,37 @@
     const iFLspan = document.getElementById('iFL');
     const torAmpSpan = document.getElementById('torAmp');
     const torPctSpan = document.getElementById('torPct');
+    const khaAmpSpan = document.getElementById('khaAmp');
+    const cableSizeSpan = document.getElementById('cableSize');
+    const cableAmpSpan = document.getElementById('cableAmp');
+
+    const cableDatabase = [
+      { size: "1.5 mm²", amp: 15 },
+      { size: "2.5 mm²", amp: 20 },
+      { size: "4 mm²", amp: 26 },
+      { size: "6 mm²", amp: 34 },
+      { size: "10 mm²", amp: 46 },
+      { size: "16 mm²", amp: 61 },
+      { size: "25 mm²", amp: 80 },
+      { size: "35 mm²", amp: 99 },
+      { size: "50 mm²", amp: 119 },
+      { size: "70 mm²", amp: 151 },
+      { size: "95 mm²", amp: 182 },
+      { size: "120 mm²", amp: 210 },
+      { size: "150 mm²", amp: 240 },
+      { size: "185 mm²", amp: 273 },
+      { size: "240 mm²", amp: 321 }
+    ];
+
+function recommendCable(current) {
+  for (let cable of cableDatabase) {
+    if (cable.amp >= current) {
+      return cable;
+    }
+  }
+
+  return null;
+}
 
     voltEl.addEventListener('change', ()=> {
       if (voltEl.value === 'other') otherV.style.display = 'inline-block';
@@ -120,10 +168,26 @@
       const torPct = parseFloat(torPctEl.value);
       const torAmp = Math.round(Ifl * torPct * 100) / 100;
 
-      iFLspan.textContent = IflRound.toLocaleString();
-      torAmpSpan.textContent = torAmp.toLocaleString();
-      torPctSpan.textContent = Math.round(torPct*100) + '%';
-      resDiv.style.display = 'block';
+// KHA kabel mengikuti persentase proteksi
+const khaRequired = Math.round(Ifl * torPct * 100) / 100;
+
+const cable = recommendCable(khaRequired);
+
+iFLspan.textContent = IflRound.toLocaleString();
+torAmpSpan.textContent = torAmp.toLocaleString();
+torPctSpan.textContent = Math.round(torPct * 100) + '%';
+
+khaAmpSpan.textContent = khaRequired.toLocaleString();
+
+if (cable) {
+  cableSizeSpan.textContent = cable.size;
+  cableAmpSpan.textContent = cable.amp;
+} else {
+  cableSizeSpan.textContent = 'Tidak ditemukan';
+  cableAmpSpan.textContent = '-';
+}
+
+resDiv.style.display = 'block';
     });
 
   </script>
